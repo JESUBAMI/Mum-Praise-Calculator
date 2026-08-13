@@ -2,8 +2,8 @@
 // 1. STORE CONFIGURATION & COMPLETE PRODUCT DATABASE
 // ====================================================
 
-// Target WhatsApp phone number (International format without '+')
-const STORE_WHATSAPP_NUMBER = "234 07062729106";
+// Target WhatsApp phone number (International format without '+' or spaces)
+const STORE_WHATSAPP_NUMBER = "2347062729106";
 
 const marketProducts = [
   // SECTION 1: Food Colouring, Oils & Spices
@@ -17,7 +17,6 @@ const marketProducts = [
       { label: "1 Roll", price: 800 },
     ],
   },
-
   {
     name: "Spicy Crayfish Colour",
     units: [
@@ -25,7 +24,6 @@ const marketProducts = [
       { label: "1 Roll", price: 800 },
     ],
   },
-
   {
     name: "Vegetable Oil",
     units: [
@@ -33,7 +31,6 @@ const marketProducts = [
       { label: "Bottle", price: 2000 },
     ],
   },
-
   {
     name: "Palm Oil",
     units: [
@@ -41,7 +38,6 @@ const marketProducts = [
       { label: "Bottle", price: 1600 },
     ],
   },
-
   { name: "akara Powder", units: [{ label: "1 piece", price: 200 }] },
   { name: "Crayfish", units: [{ label: "1 Cup", price: 900 }] },
   { name: "Akumadiju", units: [{ label: "1 Cup", price: 500 }] },
@@ -57,31 +53,32 @@ const marketProducts = [
     units: [{ label: "Small Pack", price: 500 }],
   },
   { name: "Macaroni - Honeywell", units: [{ label: "Pack", price: 800 }] },
-
   {
     name: "Tomato Paste - Party Jollof",
     units: [
       { label: "roll of 5 Sachets", price: 1000 },
-      { label: "1 Sachet", price: 200 }],
+      { label: "1 Sachet", price: 200 },
+    ],
   },
-
   {
     name: "Tomato Paste - Asun",
     units: [
       { label: "roll of 5 Sachets", price: 900 },
-      { label: "1 Sachet", price: 200 }],
+      { label: "1 Sachet", price: 200 },
+    ],
   },
   {
     name: "Tomato Paste - Pepper Chicken",
     units: [
       { label: "roll of 5 Sachets", price: 900 },
-      { label: "1 Sachet", price: 200 }],
+      { label: "1 Sachet", price: 200 },
+    ],
   },
   {
     name: "Tomato Paste - Gino",
     units: [
       { label: "roll of 5 Sachets", price: 900 },
-      { label: "1 Sachet", price: 200 }
+      { label: "1 Sachet", price: 200 },
     ],
   },
   { name: "Maggi - Chicken Flavour", units: [{ label: "Pack", price: 350 }] },
@@ -92,60 +89,85 @@ const marketProducts = [
   { name: "Maggi - Terra", units: [{ label: "Pack", price: 350 }] },
   { name: "Maggi - Terra Gold", units: [{ label: "Pack", price: 350 }] },
   { name: "Maggi - Jumbo x2", units: [{ label: "Pack", price: 170 }] },
-  { name: "Eggs", units: [
-    { label: "1 Crate", price: 5600 },
-    { label: "1 piece", price: 200 }]
+  {
+    name: "Eggs",
+    units: [
+      { label: "1 Crate", price: 5600 },
+      { label: "1 piece", price: 200 },
+    ],
   },
 
   // SECTION 3: Bar Soap, Garri, Curry/Thyme, Snacks & Seasoning
   { name: "Bar Soap - Classy Big", units: [{ label: "1 Bar", price: 600 }] },
   { name: "Bar Soap - Classy Small", units: [{ label: "1 Bar", price: 200 }] },
-  { name: "Bar Soap - Abuwe", units: [
-    { label: "1 Bar", price: 250 },
-    { label: "1 Pack", price: 1200 }] },
-  { name: "Bar Soap - Eva", units: [
-    { label: "1 Bar", price: 700 },
-    { label: "1 Pack", price: 2800 }] },
+  {
+    name: "Bar Soap - Abuwe",
+    units: [
+      { label: "1 Bar", price: 250 },
+      { label: "1 Pack", price: 1200 },
+    ],
+  },
+  {
+    name: "Bar Soap - Eva",
+    units: [
+      { label: "1 Bar", price: 700 },
+      { label: "1 Pack", price: 2800 },
+    ],
+  },
   {
     name: "Bar Soap - Premier Cool",
     units: [
       { label: "1 Bar", price: 500 },
-      { label: "1 Pack", price: 2800 }],
+      { label: "1 Pack", price: 2800 },
+    ],
   },
-  { name: "Garri", units: [
-    { label: "1 Cup", price: 50 },
-    { label: "1 Congo", price: 500 }] 
+  {
+    name: "Garri",
+    units: [
+      { label: "1 Cup", price: 50 },
+      { label: "1 Congo", price: 500 },
+    ],
   },
-
-  { name: "Curry", units: [
-    { label: "1 piece", price: 60 },
-    { label: "1 Roll", price: 600 }] 
+  {
+    name: "Curry",
+    units: [
+      { label: "1 piece", price: 60 },
+      { label: "1 Roll", price: 600 },
+    ],
   },
-
-  { name: "Thyme", units: [
-    { label: "1 piece", price: 60 },
-    { label: "1 Roll", price: 600 }] 
+  {
+    name: "Thyme",
+    units: [
+      { label: "1 piece", price: 60 },
+      { label: "1 Roll", price: 600 },
+    ],
   },
-
-  { name: "Curry Masala", units: [
-    { label: "1 piece", price: 60 },
-    { label: "1 Roll", price: 600 }] 
+  {
+    name: "Curry Masala",
+    units: [
+      { label: "1 piece", price: 60 },
+      { label: "1 Roll", price: 600 },
+    ],
   },
-
   { name: "Chin Chin", units: [{ label: "Pack", price: 100 }] },
   { name: "Epa (Groundnut)", units: [{ label: "Pack", price: 100 }] },
   { name: "Kuli-Kuli", units: [{ label: "Pack", price: 200 }] },
   { name: "Egusi", units: [{ label: "1 Cup", price: 500 }] },
   { name: "Atagungun", units: [{ label: "1 Cup", price: 700 }] },
-  { name: "Sachet Atagungun", units: [
-    { label: "1 Sachet", price: 60 },
-    { label: "1 Roll", price: 600 }] 
+  {
+    name: "Sachet Atagungun",
+    units: [
+      { label: "1 Sachet", price: 60 },
+      { label: "1 Roll", price: 600 },
+    ],
   },
-  
-  { name: "Lasor small", units: [
-    { label: "1 piece", price: 100 },
-    { label: "1 Roll", price: 600 }
-  ] },
+  {
+    name: "Lasor small",
+    units: [
+      { label: "1 piece", price: 100 },
+      { label: "1 Roll", price: 600 },
+    ],
+  },
   { name: "Lasor Chicken (Big)", units: [{ label: "Pack", price: 900 }] },
   { name: "Jollof Rice Seasoning", units: [{ label: "Pack", price: 600 }] },
 
@@ -213,7 +235,6 @@ const marketProducts = [
       { label: "1 Carton", price: 8400 },
     ],
   },
-
   { name: "Toothpaste - Oracare", units: [{ label: "Tube", price: 1000 }] },
   {
     name: "Toothpaste - Close Up (Big)",
@@ -225,10 +246,8 @@ const marketProducts = [
   },
   {
     name: "Toothpaste - Pepsodent (Big)",
-    units: [
-      { label: "Big Tube", price: 1300 }],
+    units: [{ label: "Big Tube", price: 1300 }],
   },
-
   {
     name: "Toothpaste - Pepsodent (Small)",
     units: [{ label: "Small Tube", price: 550 }],
@@ -292,19 +311,19 @@ const marketProducts = [
   },
   {
     name: "Spaghetti - Golden Penny",
-    units: [{ label: "1 Pack", price: 1050 }],
+    units: [{ label: "1  Piece", price: 1050 }],
   },
   {
     name: "Spaghetti - Auntie B",
-    units: [{ label: "1 Carton/Pack", price: 800 }],
+    units: [{ label: "1 Piece", price: 800 }],
   },
   {
     name: "Spaghetti - Mama's Pride",
-    units: [{ label: "1 Pack", price: 850 }],
+    units: [{ label: "1 Piece", price: 850 }],
   },
-  { name: "Spaghetti - Dangote", units: [{ label: "1 Pack", price: 700 }] },
-  { name: "Spaghetti - Honeywell", units: [{ label: "1 Pack", price: 750 }] },
-  { name: "Spaghetti - Crown", units: [{ label: "1 Pack", price: 950 }] },
+  { name: "Spaghetti - Dangote", units: [{ label: "1 Piece", price: 700 }] },
+  { name: "Spaghetti - Honeywell", units: [{ label: "1 Piece", price: 750 }] },
+  { name: "Spaghetti - Crown", units: [{ label: "1 Piece", price: 950 }] },
 ];
 
 // Application State Variables
@@ -331,7 +350,36 @@ document.addEventListener("click", (e) => {
 });
 
 // ====================================================
-// 2. SEARCH & DYNAMIC FILTERING LOGIC
+// 2. LOCALSTORAGE HELPER FUNCTIONS (BUG PREVENTION)
+// ====================================================
+
+function saveCartToStorage() {
+  try {
+    localStorage.setItem("marketCart", JSON.stringify(cart));
+  } catch (e) {
+    console.error("Unable to save cart to localStorage:", e);
+  }
+}
+
+function loadCartFromStorage() {
+  const savedCart = localStorage.getItem("marketCart");
+  if (savedCart) {
+    try {
+      const parsedCart = JSON.parse(savedCart);
+      if (Array.isArray(parsedCart)) {
+        cart = parsedCart;
+        renderCart();
+      }
+    } catch (e) {
+      console.error("Corrupted localStorage data, resetting cart:", e);
+      localStorage.removeItem("marketCart");
+      cart = [];
+    }
+  }
+}
+
+// ====================================================
+// 3. SEARCH & DYNAMIC FILTERING LOGIC
 // ====================================================
 
 function filterProducts() {
@@ -400,7 +448,7 @@ function resetSelection() {
 }
 
 // ====================================================
-// 3. CALCULATION & MULTIPLIER LOGIC
+// 4. CALCULATION & MULTIPLIER LOGIC
 // ====================================================
 
 function handleUnitChange() {
@@ -430,7 +478,7 @@ function updateCalculatedPrice() {
 }
 
 // ====================================================
-// 4. CART & ORDER LOGIC
+// 5. CART & ORDER LOGIC WITH PERSISTENCE
 // ====================================================
 
 function addToCart() {
@@ -449,6 +497,7 @@ function addToCart() {
   };
 
   cart.push(cartItem);
+  saveCartToStorage(); // Save persistent state
   renderCart();
 
   // Reset inputs for next search
@@ -458,6 +507,7 @@ function addToCart() {
 
 function removeFromCart(id) {
   cart = cart.filter((item) => item.id !== id);
+  saveCartToStorage(); // Save updated state after removal
   renderCart();
 }
 
@@ -498,7 +548,7 @@ function getGrandTotal() {
 }
 
 // ====================================================
-// 5. PAYMENT & WHATSAPP INTEGRATION
+// 6. PAYMENT & WHATSAPP INTEGRATION
 // ====================================================
 
 function goToPayment() {
@@ -621,6 +671,7 @@ _Please confirm receipt of this bank transfer._`;
 
 function resetApp() {
   cart = [];
+  localStorage.removeItem("marketCart"); // Clear storage on fresh session
   renderCart();
   document.getElementById("sender-name").value = "";
   document.getElementById("receipt-upload").value = "";
@@ -628,3 +679,8 @@ function resetApp() {
   document.getElementById("success-view").classList.add("hidden");
   document.getElementById("calculator-view").classList.remove("hidden");
 }
+
+// ====================================================
+// 7. INITIALIZE APP ON FIRST LOAD
+// ====================================================
+loadCartFromStorage();
