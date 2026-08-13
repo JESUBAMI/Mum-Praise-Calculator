@@ -1,0 +1,344 @@
+/* ====================================================
+   RESET & CORE STYLES
+   ==================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f7f6;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+header {
+  background-color: #00b900;
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+header p {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.content {
+  padding: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ====================================================
+   FORM CONTROLS & SEARCH SUGGESTIONS
+   ==================================================== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: #00b900;
+}
+
+.readonly-input {
+  background-color: #f9f9f9;
+  font-weight: 700;
+  color: #00b900;
+}
+
+/* Dynamic Search Dropdown Box */
+.suggestions-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.95rem;
+}
+
+.suggestion-item:hover {
+  background-color: #f5f5f5;
+  color: #00b900;
+}
+
+/* ====================================================
+   BUTTONS
+   ==================================================== */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  background-color: #00b900;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #009900;
+}
+
+.btn-secondary {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.btn-secondary:hover {
+  background-color: #dee2e6;
+}
+
+.btn:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+/* ====================================================
+   CART & ORDER SUMMARY
+   ==================================================== */
+.cart-section {
+  margin: 20px 0;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.cart-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed #eee;
+  font-size: 0.9rem;
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-item-title {
+  font-weight: 600;
+}
+
+.cart-item-unit {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.empty-cart-msg {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.total-card {
+  background-color: #eef9ee;
+  border: 1px solid #c2e8c2;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.total-label {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.total-amount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #2e7d32;
+}
+
+/* ====================================================
+   BANK DETAILS & PAYMENT VIEW
+   ==================================================== */
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.bank-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.bank-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.account-number-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copy-btn {
+  background-color: #00b900;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.highlight-total {
+  font-weight: 800;
+  color: #00b900;
+  font-size: 1.1rem;
+}
+
+.receipt-summary {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.summary-title {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.optional-tag {
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: normal;
+}
+
+.preview-box {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.preview-box img {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* ====================================================
+   SUCCESS VIEW
+   ==================================================== */
+.success-container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #d4edda;
+  color: #28a745;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  margin: 0 auto 15px;
+}
+
+.success-msg {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 10px 0 25px;
+}

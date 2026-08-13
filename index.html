@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Market Shop Calculator & Payment</title>
+
+    <!-- External CSS File Link -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Store Banner Header -->
+      <header>
+        <h1>Market Goods Store</h1>
+        <p>Select items, measure units, and calculate your total instantly</p>
+      </header>
+
+      <!-- ====================================================
+         VIEW 1: SHOPPING CALCULATOR & ORDER BUILDER FORM
+         ==================================================== -->
+      <div id="calculator-view" class="content">
+        <!-- Step 1: Search & Select Item -->
+        <div class="form-group" style="position: relative">
+          <label for="product-search">Search Item</label>
+          <input
+            type="text"
+            id="product-search"
+            placeholder="Type to search items (e.g. Milk, Oil, Beans)..."
+            oninput="filterProducts()"
+            autocomplete="off"
+          />
+
+          <!-- Dynamic Dropdown Suggestions Box -->
+          <div id="product-suggestions" class="suggestions-box hidden"></div>
+        </div>
+
+        <!-- Step 2: Select Unit / Measurement -->
+        <div class="form-group">
+          <label for="unit-select">Select Quantity / Measurement</label>
+          <select id="unit-select" disabled onchange="handleUnitChange()">
+            <option value="">-- Search item first --</option>
+          </select>
+        </div>
+
+        <!-- Step 3: Quantity Multiplier Input -->
+        <div class="form-group">
+          <label for="item-quantity">Quantity (Number of Packs/Items)</label>
+          <input
+            type="number"
+            id="item-quantity"
+            value="1"
+            min="1"
+            max="100"
+            onchange="updateCalculatedPrice()"
+            oninput="updateCalculatedPrice()"
+          />
+        </div>
+
+        <!-- Step 4: Read-only Unit Price Display -->
+        <div class="form-group">
+          <label>Selected Item Total Price</label>
+          <input
+            type="text"
+            id="unit-price-display"
+            placeholder="₦0.00"
+            readonly
+            class="readonly-input"
+          />
+        </div>
+
+        <!-- Button to Add Selected Item to Order -->
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="add-item-btn"
+          onclick="addToCart()"
+          disabled
+        >
+          + Add Item to Order
+        </button>
+
+        <!-- Order Items List Container -->
+        <div class="cart-section">
+          <div class="cart-title">Order Items</div>
+          <div id="cart-list">
+            <p class="empty-cart-msg">No items added yet.</p>
+          </div>
+        </div>
+
+        <!-- Live Calculated Grand Total Display -->
+        <div class="total-card">
+          <span class="total-label">Grand Total:</span>
+          <span class="total-amount" id="grand-total-display">₦0.00</span>
+        </div>
+
+        <!-- Proceed to Checkout -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="checkout-btn"
+          onclick="goToPayment()"
+          disabled
+        >
+          Proceed to Pay
+        </button>
+      </div>
+
+      <!-- ====================================================
+         VIEW 2: BANK PAYMENT DETAILS & RECEIPT SCREEN
+         ==================================================== -->
+      <div id="payment-view" class="content hidden">
+        <div class="alert-success">
+          Order calculated! Make a transfer to complete your purchase.
+        </div>
+
+        <!-- Bank Transfer Details Card -->
+        <div class="bank-card">
+          <div class="bank-row">
+            <span>Bank Name</span>
+            <span style="font-weight: 700; color: #00b900"
+              >OPay / Moniepoint MFB</span
+            >
+          </div>
+          <div class="bank-row">
+            <span>Account Name</span>
+            <span>Market Store Enterprise</span>
+          </div>
+          <div class="bank-row">
+            <span>Account Number</span>
+            <div class="account-number-box">
+              <span
+                id="account-number"
+                style="font-size: 1.1rem; font-weight: 800; letter-spacing: 1px"
+                >7062729106</span
+              >
+              <button class="copy-btn" onclick="copyAccountNumber()">
+                Copy Number
+              </button>
+            </div>
+          </div>
+          <div class="bank-row">
+            <span>Amount to Pay</span>
+            <span id="payment-total-display" class="highlight-total"
+              >₦0.00</span
+            >
+          </div>
+        </div>
+
+        <!-- One-Tap App Launcher Section
+        <div class="form-group" style="margin-bottom: 20px">
+          <label>Open Your Bank App to Pay:</label>
+          <div style="display: flex; gap: 10px; margin-top: 6px">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #1dc26d; color: white; flex: 1"
+              onclick="openBankApp('opay')"
+            >
+              Open OPay App
+            </button>
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #0f4c81; color: white; flex: 1"
+              onclick="openBankApp('moniepoint')"
+            >
+              Open Moniepoint
+            </button>
+          </div> -->
+        <!-- </div> -->
+
+        <!-- Order Summary Breakdown -->
+        <div class="receipt-summary">
+          <label class="summary-title">Order Breakdown</label>
+          <div id="payment-items-summary"></div>
+        </div>
+
+        <!-- Sender's Account Name Field -->
+        <div class="form-group">
+          <label for="sender-name">Sender's Account Name</label>
+          <input
+            type="text"
+            id="sender-name"
+            placeholder="Enter full name on transfer account"
+          />
+        </div>
+
+        <!-- File Upload for Receipt Screenshot -->
+        <div class="form-group">
+          <label for="receipt-upload">
+            Upload Transfer Receipt / Screenshot
+            <span class="optional-tag">(Optional)</span>
+          </label>
+          <input
+            type="file"
+            id="receipt-upload"
+            accept="image/*"
+            onchange="handleReceiptPreview(event)"
+          />
+
+          <!-- Live Image Preview Box -->
+          <div id="receipt-preview-container" class="preview-box hidden">
+            <img id="receipt-preview" src="" alt="Receipt Preview" />
+          </div>
+        </div>
+
+        <!-- Confirmation Actions -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="confirmPayment()"
+        >
+          I Have Made the Transfer
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="backToCalculator()"
+        >
+          Back to Calculator
+        </button>
+      </div>
+
+      <!-- ====================================================
+         VIEW 3: SUCCESS / ORDER CONFIRMATION VIEW
+         ==================================================== -->
+      <div id="success-view" class="content hidden success-container">
+        <div class="success-icon">✓</div>
+        <h2>Order Submitted!</h2>
+        <p class="success-msg">
+          Thank you. Your order details and transfer confirmation have been sent
+          to WhatsApp for verification.
+        </p>
+        <button class="btn btn-primary" onclick="resetApp()">
+          Start New Order
+        </button>
+      </div>
+    </div>
+
+    <!-- External JavaScript File Link -->
+    <script src="script.js"></script>
+  </body>
+</html>
