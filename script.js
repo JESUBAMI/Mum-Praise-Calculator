@@ -647,7 +647,7 @@ function confirmPayment() {
   });
 
   const receiptStatusText = hasReceipt
-    ? "📎 *Receipt Attached:* Yes (sending the screenshot as a separate attachment)"
+    ? "📎 *Receipt Attached:* Yes (customer will attach the screenshot in this chat)"
     : "📎 *Receipt Attached:* No screenshot attached";
 
   const message = `*NEW MARKET ORDER & PAYMENT ALERT* 🛒
@@ -666,29 +666,13 @@ _Please confirm receipt of this bank transfer._`;
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-  // Try to hand the actual receipt photo to the phone's native share sheet
-  // so the customer can send it as a real WhatsApp attachment. A wa.me link
-  // can only pre-fill text — it can never attach a file on its own.
-  if (
-    hasReceipt &&
-    navigator.canShare &&
-    navigator.canShare({ files: [uploadedReceiptFile] })
-  ) {
-    navigator
-      .share({
-        files: [uploadedReceiptFile],
-        title: "Payment Receipt",
-        text: "Here's my payment receipt screenshot.",
-      })
-      .catch((err) => {
-        // AbortError just means the customer closed the share sheet — not a real error
-        if (err.name !== "AbortError") {
-          console.error("Share failed:", err);
-        }
-      });
-  } else if (hasReceipt) {
+  // wa.me already opens directly into the shop's own chat (no searching
+  // needed, the number is built into the link). A website can't attach a
+  // file into that chat automatically, so just tell the customer to tap
+  // the attach icon inside the chat that's about to open.
+  if (hasReceipt) {
     alert(
-      "Your order message will open in WhatsApp now.\n\nThis device/browser can't auto-attach your screenshot, so please manually attach it in the WhatsApp chat that opens.",
+      "WhatsApp will open now with your order details already in the chat.\n\nPlease tap the 📎 attach icon in that same chat and select your receipt screenshot to send it too.",
     );
   }
 
