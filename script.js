@@ -3,7 +3,7 @@
 // ====================================================
 
 // Target WhatsApp phone number (International format without '+' or spaces)
-const STORE_WHATSAPP_NUMBER = "2347062729106";
+const STORE_WHATSAPP_NUMBER = "2347045465015";
 
 const marketProducts = [
   // SECTION 1: Food Colouring, Oils & Spices
