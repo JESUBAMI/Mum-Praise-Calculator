@@ -609,12 +609,15 @@ function openBankApp(appType) {
   }
 }
 
+let uploadedReceiptFile = null; // Holds the real File object for native sharing later
+
 function handleReceiptPreview(event) {
   const file = event.target.files[0];
   const previewContainer = document.getElementById("receipt-preview-container");
   const previewImg = document.getElementById("receipt-preview");
 
   if (file) {
+    uploadedReceiptFile = file;
     const reader = new FileReader();
     reader.onload = function (e) {
       previewImg.src = e.target.result;
@@ -622,6 +625,7 @@ function handleReceiptPreview(event) {
     };
     reader.readAsDataURL(file);
   } else {
+    uploadedReceiptFile = null;
     previewContainer.classList.add("hidden");
     previewImg.src = "";
   }
@@ -634,8 +638,7 @@ function confirmPayment() {
     return;
   }
 
-  const receiptInput = document.getElementById("receipt-upload");
-  const hasReceipt = receiptInput.files && receiptInput.files.length > 0;
+  const hasReceipt = !!uploadedReceiptFile;
   const grandTotal = getGrandTotal();
 
   let orderItemsText = "";
@@ -644,7 +647,7 @@ function confirmPayment() {
   });
 
   const receiptStatusText = hasReceipt
-    ? "📎 *Receipt Attached:* Yes (Sending screenshot image below in WhatsApp)"
+    ? "📎 *Receipt Attached:* Yes (sending the screenshot as a separate attachment)"
     : "📎 *Receipt Attached:* No screenshot attached";
 
   const message = `*NEW MARKET ORDER & PAYMENT ALERT* 🛒
@@ -663,6 +666,32 @@ _Please confirm receipt of this bank transfer._`;
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
+  // Try to hand the actual receipt photo to the phone's native share sheet
+  // so the customer can send it as a real WhatsApp attachment. A wa.me link
+  // can only pre-fill text — it can never attach a file on its own.
+  if (
+    hasReceipt &&
+    navigator.canShare &&
+    navigator.canShare({ files: [uploadedReceiptFile] })
+  ) {
+    navigator
+      .share({
+        files: [uploadedReceiptFile],
+        title: "Payment Receipt",
+        text: "Here's my payment receipt screenshot.",
+      })
+      .catch((err) => {
+        // AbortError just means the customer closed the share sheet — not a real error
+        if (err.name !== "AbortError") {
+          console.error("Share failed:", err);
+        }
+      });
+  } else if (hasReceipt) {
+    alert(
+      "Your order message will open in WhatsApp now.\n\nThis device/browser can't auto-attach your screenshot, so please manually attach it in the WhatsApp chat that opens.",
+    );
+  }
+
   document.getElementById("payment-view").classList.add("hidden");
   document.getElementById("success-view").classList.remove("hidden");
 
@@ -671,6 +700,7 @@ _Please confirm receipt of this bank transfer._`;
 
 function resetApp() {
   cart = [];
+  uploadedReceiptFile = null;
   localStorage.removeItem("marketCart"); // Clear storage on fresh session
   renderCart();
   document.getElementById("sender-name").value = "";
