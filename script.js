@@ -330,6 +330,7 @@ const marketProducts = [
 let cart = [];
 let selectedProductIndex = null;
 let currentSelectedPrice = 0;
+let verifiedOrder = null; // Set by the server after verifyOrderWithServer() succeeds
 
 // DOM Element References
 const productSearchInput = document.getElementById("product-search");
@@ -494,6 +495,8 @@ function addToCart() {
     name: product.name,
     unit: `${qty}x ${unitData.label}`,
     price: totalPrice,
+    qty: qty,
+    unitIndex: Number(unitSelect.value),
   };
 
   cart.push(cartItem);
@@ -551,19 +554,68 @@ function getGrandTotal() {
 // 6. PAYMENT & WHATSAPP INTEGRATION
 // ====================================================
 
-function goToPayment() {
+// ----------------------------------------------------
+// Server-side price verification
+// ----------------------------------------------------
+// Sends only product name + unit index + quantity to the server.
+// The server looks up the real price itself and returns the
+// verified total — nothing the browser calculated is trusted.
+async function verifyOrderWithServer(cartItems) {
+  const response = await fetch("/api/verify-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      items: cartItems.map((item) => ({
+        name: item.name,
+        unitIndex: item.unitIndex,
+        qty: item.qty,
+      })),
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    const message =
+      (data && data.details && data.details.join("\n")) ||
+      (data && data.error) ||
+      "Order verification failed.";
+    throw new Error(message);
+  }
+
+  return data; // { items: [...], total: number }
+}
+
+async function goToPayment() {
   if (cart.length === 0) return;
+
+  checkoutBtn.disabled = true;
+  checkoutBtn.textContent = "Verifying order...";
+
+  try {
+    verifiedOrder = await verifyOrderWithServer(cart);
+  } catch (err) {
+    alert(
+      "We couldn't verify your order with the server. Please try again.\n\n" +
+        err.message,
+    );
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = "Proceed to Pay";
+    return;
+  }
+
+  checkoutBtn.textContent = "Proceed to Pay";
+  checkoutBtn.disabled = false;
 
   document.getElementById("calculator-view").classList.add("hidden");
   document.getElementById("payment-view").classList.remove("hidden");
 
-  const total = getGrandTotal();
   document.getElementById("payment-total-display").textContent =
-    `₦${total.toLocaleString()}`;
+    `₦${verifiedOrder.total.toLocaleString()}`;
 
   const summaryContainer = document.getElementById("payment-items-summary");
   summaryContainer.innerHTML = "";
-  cart.forEach((item) => {
+  verifiedOrder.items.forEach((item) => {
     const row = document.createElement("div");
     row.style.display = "flex";
     row.style.justifyContent = "space-between";
@@ -628,6 +680,11 @@ function handleReceiptPreview(event) {
 }
 
 function confirmPayment() {
+  if (!verifiedOrder) {
+    alert("Your order hasn't been verified yet. Please go back and tap 'Proceed to Pay' again.");
+    return;
+  }
+
   const senderName = document.getElementById("sender-name").value.trim();
   if (!senderName) {
     alert("Please enter the sender's account name for payment verification.");
@@ -636,10 +693,10 @@ function confirmPayment() {
 
   const receiptInput = document.getElementById("receipt-upload");
   const hasReceipt = receiptInput.files && receiptInput.files.length > 0;
-  const grandTotal = getGrandTotal();
+  const grandTotal = verifiedOrder.total;
 
   let orderItemsText = "";
-  cart.forEach((item, index) => {
+  verifiedOrder.items.forEach((item, index) => {
     orderItemsText += `${index + 1}. *${item.name}* (${item.unit}) - ₦${item.price.toLocaleString()}\n`;
   });
 
@@ -671,6 +728,7 @@ _Please confirm receipt of this bank transfer._`;
 
 function resetApp() {
   cart = [];
+  verifiedOrder = null;
   localStorage.removeItem("marketCart"); // Clear storage on fresh session
   renderCart();
   document.getElementById("sender-name").value = "";
