@@ -5,6 +5,11 @@
 // Target WhatsApp phone number (International format without '+' or spaces)
 const STORE_WHATSAPP_NUMBER = "2347062729106";
 
+// Free image-hosting API key from api.imgbb.com — replace the placeholder
+// below with your real key. Used to upload the receipt screenshot so a
+// viewable link can be included automatically in the WhatsApp message.
+const IMGBB_API_KEY = "PASTE_YOUR_IMGBB_API_KEY_HERE";
+
 const marketProducts = [
   // SECTION 1: Food Colouring, Oils & Spices
   { name: "Milk Flavour", units: [{ label: "Unit/Pack", price: 250 }] },
@@ -631,28 +636,19 @@ function copyAccountNumber() {
   alert("Account number copied to clipboard!");
 }
 
-function openBankApp(appType) {
+function openBankApp() {
   const accNum = document.getElementById("account-number").textContent;
   navigator.clipboard.writeText(accNum);
 
-  alert(
-    `Account number (${accNum}) copied! Opening ${appType.toUpperCase()}...`,
-  );
+  alert(`Account number (${accNum}) copied! Opening Moniepoint...`);
 
-  if (appType === "opay") {
-    window.location.href = "opay://";
-    setTimeout(() => {
-      window.location.href = "https://p.opayweb.com";
-    }, 1500);
-  } else if (appType === "moniepoint") {
-    window.location.href = "moniepoint://";
-    setTimeout(() => {
-      window.location.href = "https://moniepoint.com";
-    }, 1500);
-  }
+  window.location.href = "moniepoint://";
+  setTimeout(() => {
+    window.location.href = "https://moniepoint.com";
+  }, 1500);
 }
 
-let uploadedReceiptFile = null; // Holds the real File object for native sharing later
+let uploadedReceiptFile = null; // Holds the real File object for uploading later
 
 function handleReceiptPreview(event) {
   const file = event.target.files[0];
@@ -674,7 +670,37 @@ function handleReceiptPreview(event) {
   }
 }
 
-function confirmPayment() {
+// Uploads the receipt photo to imgbb (free image host, no backend needed)
+// and returns a viewable URL. Returns null if the upload fails for any
+// reason, so the caller can fall back gracefully instead of breaking.
+async function uploadReceiptToImgbb(file) {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+
+    if (data && data.success && data.data && data.data.url) {
+      return data.data.url;
+    }
+
+    console.error("imgbb upload did not return a URL:", data);
+    return null;
+  } catch (err) {
+    console.error("Receipt upload failed:", err);
+    return null;
+  }
+}
+
+async function confirmPayment() {
   const senderName = document.getElementById("sender-name").value.trim();
   if (!senderName) {
     alert("Please enter the sender's account name for payment verification.");
@@ -683,15 +709,32 @@ function confirmPayment() {
 
   const hasReceipt = !!uploadedReceiptFile;
   const grandTotal = getGrandTotal();
+  const confirmBtn = document.getElementById("confirm-payment-btn");
+
+  let receiptUrl = null;
+
+  if (hasReceipt) {
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = "Uploading receipt...";
+    receiptUrl = await uploadReceiptToImgbb(uploadedReceiptFile);
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "I Have Made the Transfer";
+  }
 
   let orderItemsText = "";
   cart.forEach((item, index) => {
     orderItemsText += `${index + 1}. *${item.name}* (${item.unit}) - ₦${item.price.toLocaleString()}\n`;
   });
 
-  const receiptStatusText = hasReceipt
-    ? "📎 *Receipt Attached:* Yes (customer will attach the screenshot in this chat)"
-    : "📎 *Receipt Attached:* No screenshot attached";
+  let receiptStatusText;
+  if (hasReceipt && receiptUrl) {
+    receiptStatusText = `📎 *Receipt:* ${receiptUrl}`;
+  } else if (hasReceipt && !receiptUrl) {
+    receiptStatusText =
+      "📎 *Receipt Attached:* Yes (upload failed — customer will attach it manually in this chat)";
+  } else {
+    receiptStatusText = "📎 *Receipt Attached:* No screenshot attached";
+  }
 
   const message = `*NEW MARKET ORDER & PAYMENT ALERT* 🛒
 
@@ -709,13 +752,11 @@ _Please confirm receipt of this bank transfer._`;
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-  // wa.me already opens directly into the shop's own chat (no searching
-  // needed, the number is built into the link). A website can't attach a
-  // file into that chat automatically, so just tell the customer to tap
-  // the attach icon inside the chat that's about to open.
-  if (hasReceipt) {
+  // Only fall back to the manual-attach instruction if the automatic
+  // upload genuinely failed — otherwise the link is already in the message.
+  if (hasReceipt && !receiptUrl) {
     alert(
-      "WhatsApp will open now with your order details already in the chat.\n\nPlease tap the 📎 attach icon in that same chat and select your receipt screenshot to send it too.",
+      "We couldn't upload your receipt automatically. WhatsApp will open now — please tap the 📎 attach icon in that same chat and select your receipt screenshot to send it too.",
     );
   }
 

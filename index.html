@@ -150,20 +150,12 @@
         <!-- One-Tap App Launcher Section -->
         <div class="form-group" style="margin-bottom: 20px">
           <label>Open Your Bank App to Pay:</label>
-          <div style="display: flex; gap: 10px; margin-top: 6px">
+          <div style="margin-top: 6px">
             <button
               type="button"
               class="btn"
-              style="background-color: #1dc26d; color: white; flex: 1"
-              onclick="openBankApp('opay')"
-            >
-              Open OPay App
-            </button>
-            <button
-              type="button"
-              class="btn"
-              style="background-color: #0f4c81; color: white; flex: 1"
-              onclick="openBankApp('moniepoint')"
+              style="background-color: #0f4c81; color: white"
+              onclick="openBankApp()"
             >
               Open Moniepoint
             </button>
@@ -209,6 +201,7 @@
         <button
           type="button"
           class="btn btn-primary"
+          id="confirm-payment-btn"
           onclick="confirmPayment()"
         >
           I Have Made the Transfer
@@ -258,5 +251,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-
-
