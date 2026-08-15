@@ -8,7 +8,7 @@ const STORE_WHATSAPP_NUMBER = "2347062729106";
 // Free image-hosting API key from api.imgbb.com — replace the placeholder
 // below with your real key. Used to upload the receipt screenshot so a
 // viewable link can be included automatically in the WhatsApp message.
-const IMGBB_API_KEY = "PASTE_YOUR_IMGBB_API_KEY_HERE";
+const IMGBB_API_KEY = "003dd6e6f9429388213a5a252ac3c9b5";
 
 const marketProducts = [
   // SECTION 1: Food Colouring, Oils & Spices
