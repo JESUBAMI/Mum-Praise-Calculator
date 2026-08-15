@@ -234,6 +234,17 @@ select:focus {
   color: #2e7d32;
 }
 
+/* Budget Remaining — over-budget warning state */
+.budget-over {
+  background-color: #fdecea;
+  border-color: #f5c2c0;
+}
+
+.budget-over .total-label,
+.budget-over .total-amount {
+  color: #c0392b;
+}
+
 /* ====================================================
    BANK DETAILS & PAYMENT VIEW
    ==================================================== */

@@ -20,6 +20,18 @@
          VIEW 1: SHOPPING CALCULATOR & ORDER BUILDER FORM
          ==================================================== -->
       <div id="calculator-view" class="content">
+        <!-- Step 0: Optional Budget Planning -->
+        <div class="form-group">
+          <label for="customer-budget">How Much Do You Want to Spend? (Optional)</label>
+          <input
+            type="number"
+            id="customer-budget"
+            placeholder="e.g. 2000"
+            min="0"
+            oninput="updateBudgetRemaining()"
+          />
+        </div>
+
         <!-- Step 1: Search & Select Item -->
         <div class="form-group" style="position: relative">
           <label for="product-search">Search Item</label>
@@ -94,6 +106,12 @@
           <span class="total-amount" id="grand-total-display">₦0.00</span>
         </div>
 
+        <!-- Budget Remaining Display (only shown once a budget is entered) -->
+        <div id="budget-remaining-card" class="total-card hidden">
+          <span class="total-label" id="budget-remaining-label">Budget Remaining:</span>
+          <span class="total-amount" id="budget-remaining-display">₦0.00</span>
+        </div>
+
         <!-- Proceed to Checkout -->
         <button
           type="button"
@@ -124,7 +142,7 @@
           </div>
           <div class="bank-row">
             <span>Account Name</span>
-            <span>Matthew Ayobami Ajibade</span>
+            <span>Market Store Enterprise</span>
           </div>
           <div class="bank-row">
             <span>Account Number</span>

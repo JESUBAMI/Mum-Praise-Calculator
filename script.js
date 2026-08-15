@@ -521,6 +521,7 @@ function renderCart() {
     cartList.innerHTML = `<p class="empty-cart-msg">No items added yet.</p>`;
     grandTotalDisplay.textContent = "₦0.00";
     checkoutBtn.disabled = true;
+    updateBudgetRemaining();
     return;
   }
 
@@ -546,6 +547,36 @@ function renderCart() {
 
   grandTotalDisplay.textContent = `₦${total.toLocaleString()}`;
   checkoutBtn.disabled = false;
+  updateBudgetRemaining();
+}
+
+// Reads the customer's optional budget and shows how much of it is left
+// (or how far over they've gone) as items are added to the cart.
+function updateBudgetRemaining() {
+  const budgetInput = document.getElementById("customer-budget");
+  const budgetCard = document.getElementById("budget-remaining-card");
+  const budgetLabel = document.getElementById("budget-remaining-label");
+  const budgetDisplay = document.getElementById("budget-remaining-display");
+
+  const budget = parseFloat(budgetInput.value) || 0;
+
+  if (budget <= 0) {
+    budgetCard.classList.add("hidden");
+    return;
+  }
+
+  budgetCard.classList.remove("hidden");
+  const remaining = budget - getGrandTotal();
+
+  if (remaining < 0) {
+    budgetCard.classList.add("budget-over");
+    budgetLabel.textContent = "Over Budget By:";
+    budgetDisplay.textContent = `₦${Math.abs(remaining).toLocaleString()}`;
+  } else {
+    budgetCard.classList.remove("budget-over");
+    budgetLabel.textContent = "Budget Remaining:";
+    budgetDisplay.textContent = `₦${remaining.toLocaleString()}`;
+  }
 }
 
 function getGrandTotal() {
@@ -773,6 +804,8 @@ function resetApp() {
   uploadedReceiptFile = null;
   localStorage.removeItem("marketCart"); // Clear storage on fresh session
   renderCart();
+  document.getElementById("customer-budget").value = "";
+  document.getElementById("budget-remaining-card").classList.add("hidden");
   document.getElementById("sender-name").value = "";
   document.getElementById("receipt-upload").value = "";
   document.getElementById("receipt-preview-container").classList.add("hidden");
