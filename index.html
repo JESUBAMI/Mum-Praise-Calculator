@@ -119,7 +119,7 @@
           <div class="bank-row">
             <span>Bank Name</span>
             <span style="font-weight: 700; color: #00b900"
-              >Moniepoint MFB</span
+              >OPay / Moniepoint MFB</span
             >
           </div>
           <div class="bank-row">
@@ -132,7 +132,8 @@
               <span
                 id="account-number"
                 style="font-size: 1.1rem; font-weight: 800; letter-spacing: 1px"
-                >5090693520</span>
+                >7062729106</span
+              >
               <button class="copy-btn" onclick="copyAccountNumber()">
                 Copy Number
               </button>
@@ -226,11 +227,27 @@
          ==================================================== -->
       <div id="success-view" class="content hidden success-container">
         <div class="success-icon">✓</div>
-        <h2>Order Submitted!</h2>
-        <p class="success-msg">
-          Thank you. Your order details and transfer confirmation have been sent
-          to WhatsApp for verification.
+        <h2>Order Ready</h2>
+
+        <div class="confirm-card">
+          <p class="confirm-label">Items</p>
+          <p class="confirm-number" id="confirm-item-count">0</p>
+          <div class="confirm-icons" id="confirm-icons"></div>
+        </div>
+
+        <div class="confirm-card confirm-total-card">
+          <p class="confirm-label">Total</p>
+          <p class="confirm-number confirm-total" id="confirm-total-amount">
+            ₦0.00
+          </p>
+        </div>
+
+        <p id="confirm-receipt-status" class="confirm-receipt-status hidden">
+          📎 Receipt attached
         </p>
+
+        <p class="show-screen-note">Show this screen before you go</p>
+
         <button class="btn btn-primary" onclick="resetApp()">
           Start New Order
         </button>

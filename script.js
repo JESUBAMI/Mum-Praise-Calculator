@@ -547,6 +547,49 @@ function getGrandTotal() {
   return cart.reduce((sum, item) => sum + item.price, 0);
 }
 
+function getTotalItemQuantity() {
+  return cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+}
+
+// Fills the final "Order Ready" screen with a big item count, a matching
+// row of icons (capped so a bulk order doesn't flood the screen), and the
+// total — so the total can be checked at a glance without reading anything.
+const MAX_CONFIRM_ICONS = 12;
+
+function populateConfirmationScreen() {
+  const totalQty = getTotalItemQuantity();
+  const grandTotal = getGrandTotal();
+
+  document.getElementById("confirm-item-count").textContent = totalQty;
+  document.getElementById("confirm-total-amount").textContent =
+    `₦${grandTotal.toLocaleString()}`;
+
+  const iconsContainer = document.getElementById("confirm-icons");
+  iconsContainer.innerHTML = "";
+
+  const iconsToShow = Math.min(totalQty, MAX_CONFIRM_ICONS);
+  for (let i = 0; i < iconsToShow; i++) {
+    const icon = document.createElement("span");
+    icon.className = "confirm-icon";
+    icon.textContent = "🛍️";
+    iconsContainer.appendChild(icon);
+  }
+
+  if (totalQty > MAX_CONFIRM_ICONS) {
+    const overflow = document.createElement("span");
+    overflow.className = "confirm-icon-overflow";
+    overflow.textContent = `+${totalQty - MAX_CONFIRM_ICONS}`;
+    iconsContainer.appendChild(overflow);
+  }
+
+  const receiptStatusEl = document.getElementById("confirm-receipt-status");
+  if (uploadedReceiptFile) {
+    receiptStatusEl.classList.remove("hidden");
+  } else {
+    receiptStatusEl.classList.add("hidden");
+  }
+}
+
 // ====================================================
 // 6. PAYMENT & WHATSAPP INTEGRATION
 // ====================================================
@@ -675,6 +718,8 @@ _Please confirm receipt of this bank transfer._`;
       "WhatsApp will open now with your order details already in the chat.\n\nPlease tap the 📎 attach icon in that same chat and select your receipt screenshot to send it too.",
     );
   }
+
+  populateConfirmationScreen();
 
   document.getElementById("payment-view").classList.add("hidden");
   document.getElementById("success-view").classList.remove("hidden");

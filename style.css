@@ -342,3 +342,72 @@ select:focus {
   color: #666;
   margin: 10px 0 25px;
 }
+
+/* Order confirmation card (item count + icons + total) */
+.confirm-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 14px 0;
+  text-align: center;
+}
+
+.confirm-total-card {
+  background-color: #eef9ee;
+  border-color: #c2e8c2;
+}
+
+.confirm-label {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.confirm-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #333;
+  line-height: 1.1;
+}
+
+.confirm-total {
+  color: #00b900;
+}
+
+.confirm-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.confirm-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.confirm-icon-overflow {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #777;
+  display: flex;
+  align-items: center;
+}
+
+.confirm-receipt-status {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 4px 0 4px;
+}
+
+.show-screen-note {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2e7d32;
+  background-color: #eef9ee;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 16px 0 20px;
+}
