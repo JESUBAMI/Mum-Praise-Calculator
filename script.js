@@ -3,7 +3,7 @@
 // ====================================================
 
 // Target WhatsApp phone number (International format without '+' or spaces)
-const STORE_WHATSAPP_NUMBER = "2347062729106";
+const STORE_WHATSAPP_NUMBER = "2347045465015";
 
 // Free image-hosting API key from api.imgbb.com — replace the placeholder
 // below with your real key. Used to upload the receipt screenshot so a
