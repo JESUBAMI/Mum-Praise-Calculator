@@ -10,326 +10,58 @@ const STORE_WHATSAPP_NUMBER = "2347062729106";
 // viewable link can be included automatically in the WhatsApp message.
 const IMGBB_API_KEY = "003dd6e6f9429388213a5a252ac3c9b5";
 
-const marketProducts = [
-  // SECTION 1: Food Colouring, Oils & Spices
-  { name: "Milk Flavour", units: [{ label: "Unit/Pack", price: 250 }] },
-  { name: "Power Oil", units: [{ label: "Sachet", price: 200 }] },
-  { name: "Potatoes", units: [{ label: "Unit/Portion", price: 500 }] },
-  {
-    name: "Spicy Jollof Rice Colour",
-    units: [
-      { label: "1 sachet", price: 100 },
-      { label: "1 Roll", price: 800 },
-    ],
-  },
-  {
-    name: "Spicy Crayfish Colour",
-    units: [
-      { label: "1 sachet", price: 100 },
-      { label: "1 Roll", price: 800 },
-    ],
-  },
-  {
-    name: "Vegetable Oil",
-    units: [
-      { label: "1/2 bottle", price: 1000 },
-      { label: "Bottle", price: 2000 },
-    ],
-  },
-  {
-    name: "Palm Oil",
-    units: [
-      { label: "1/2 bottle", price: 800 },
-      { label: "Bottle", price: 1600 },
-    ],
-  },
-  { name: "akara Powder", units: [{ label: "1 piece", price: 200 }] },
-  { name: "Crayfish", units: [{ label: "1 Cup", price: 900 }] },
-  { name: "Akumadiju", units: [{ label: "1 Cup", price: 500 }] },
+// Products are now loaded live from a Google Sheet, so prices/items can be
+// edited there directly — no code changes or redeployment needed.
+// The sheet must have 3 columns in this order: Product Name | Unit Label | Price
+const PRODUCTS_SHEET_ID = "1asqli9G4_sbl2wrcKmKKmAC1KM2AYuDzG4vBXrIZKCY";
 
-  // SECTION 2: Pasta, Seasoning Cubes & Eggs
-  { name: "Macaroni - Mama's Pride", units: [{ label: "Pack", price: 850 }] },
-  {
-    name: "Macaroni - Golden Penny (Big)",
-    units: [{ label: "Big Pack", price: 1000 }],
-  },
-  {
-    name: "Macaroni - Golden Penny (Small)",
-    units: [{ label: "Small Pack", price: 500 }],
-  },
-  { name: "Macaroni - Honeywell", units: [{ label: "Pack", price: 800 }] },
-  {
-    name: "Tomato Paste - Party Jollof",
-    units: [
-      { label: "roll of 5 Sachets", price: 1000 },
-      { label: "1 Sachet", price: 200 },
-    ],
-  },
-  {
-    name: "Tomato Paste - Asun",
-    units: [
-      { label: "roll of 5 Sachets", price: 900 },
-      { label: "1 Sachet", price: 200 },
-    ],
-  },
-  {
-    name: "Tomato Paste - Pepper Chicken",
-    units: [
-      { label: "roll of 5 Sachets", price: 900 },
-      { label: "1 Sachet", price: 200 },
-    ],
-  },
-  {
-    name: "Tomato Paste - Gino",
-    units: [
-      { label: "roll of 5 Sachets", price: 900 },
-      { label: "1 Sachet", price: 200 },
-    ],
-  },
-  { name: "Maggi - Chicken Flavour", units: [{ label: "Pack", price: 350 }] },
-  { name: "Maggi - Gino Max", units: [{ label: "Pack", price: 400 }] },
-  { name: "Maggi - Asun", units: [{ label: "Pack", price: 250 }] },
-  { name: "Maggi - Selects", units: [{ label: "Pack", price: 500 }] },
-  { name: "Maggi - Pepper Chicken", units: [{ label: "Pack", price: 250 }] },
-  { name: "Maggi - Terra", units: [{ label: "Pack", price: 350 }] },
-  { name: "Maggi - Terra Gold", units: [{ label: "Pack", price: 350 }] },
-  { name: "Maggi - Jumbo x2", units: [{ label: "Pack", price: 170 }] },
-  {
-    name: "Eggs",
-    units: [
-      { label: "1 Crate", price: 5600 },
-      { label: "1 piece", price: 200 },
-    ],
-  },
+let marketProducts = [];
 
-  // SECTION 3: Bar Soap, Garri, Curry/Thyme, Snacks & Seasoning
-  { name: "Bar Soap - Classy Big", units: [{ label: "1 Bar", price: 600 }] },
-  { name: "Bar Soap - Classy Small", units: [{ label: "1 Bar", price: 200 }] },
-  {
-    name: "Bar Soap - Abuwe",
-    units: [
-      { label: "1 Bar", price: 250 },
-      { label: "1 Pack", price: 1200 },
-    ],
-  },
-  {
-    name: "Bar Soap - Eva",
-    units: [
-      { label: "1 Bar", price: 700 },
-      { label: "1 Pack", price: 2800 },
-    ],
-  },
-  {
-    name: "Bar Soap - Premier Cool",
-    units: [
-      { label: "1 Bar", price: 500 },
-      { label: "1 Pack", price: 2800 },
-    ],
-  },
-  {
-    name: "Garri",
-    units: [
-      { label: "1 Cup", price: 50 },
-      { label: "1 Congo", price: 500 },
-    ],
-  },
-  {
-    name: "Curry",
-    units: [
-      { label: "1 piece", price: 60 },
-      { label: "1 Roll", price: 600 },
-    ],
-  },
-  {
-    name: "Thyme",
-    units: [
-      { label: "1 piece", price: 60 },
-      { label: "1 Roll", price: 600 },
-    ],
-  },
-  {
-    name: "Curry Masala",
-    units: [
-      { label: "1 piece", price: 60 },
-      { label: "1 Roll", price: 600 },
-    ],
-  },
-  { name: "Chin Chin", units: [{ label: "Pack", price: 100 }] },
-  { name: "Epa (Groundnut)", units: [{ label: "Pack", price: 100 }] },
-  { name: "Kuli-Kuli", units: [{ label: "Pack", price: 200 }] },
-  { name: "Egusi", units: [{ label: "1 Cup", price: 500 }] },
-  { name: "Atagungun", units: [{ label: "1 Cup", price: 700 }] },
-  {
-    name: "Sachet Atagungun",
-    units: [
-      { label: "1 Sachet", price: 60 },
-      { label: "1 Roll", price: 600 },
-    ],
-  },
-  {
-    name: "Lasor small",
-    units: [
-      { label: "1 piece", price: 100 },
-      { label: "1 Roll", price: 600 },
-    ],
-  },
-  { name: "Lasor Chicken (Big)", units: [{ label: "Pack", price: 900 }] },
-  { name: "Jollof Rice Seasoning", units: [{ label: "Pack", price: 600 }] },
+// Fetches the published sheet, parses it, and groups rows by product name
+// into the same {name, units: [{label, price}, ...]} shape the rest of the
+// app already expects. Falls back to an error state if anything goes wrong.
+async function loadProductsFromSheet() {
+  const url = `https://docs.google.com/spreadsheets/d/${PRODUCTS_SHEET_ID}/gviz/tq?tqx=out:json&gid=0`;
 
-  // SECTION 4: Milk, Noodles, Toothpaste, Detergent
-  {
-    name: "Milo",
-    units: [
-      { label: "1 Sachet", price: 200 },
-      { label: "Roll", price: 1900 },
-    ],
-  },
-  {
-    name: "Peak Milk",
-    units: [
-      { label: "1 Sachet", price: 200 },
-      { label: "Roll", price: 1900 },
-    ],
-  },
-  {
-    name: "Good time Milk",
-    units: [
-      { label: "1 Unit", price: 100 },
-      { label: "Pack/Tin", price: 900 },
-    ],
-  },
-  {
-    name: "kremela Milk",
-    units: [
-      { label: "1 Unit", price: 100 },
-      { label: "Pack", price: 900 },
-    ],
-  },
-  {
-    name: "Hollandia Milk",
-    units: [
-      { label: "1 Sachet", price: 250 },
-      { label: "Big Pack", price: 1900 },
-    ],
-  },
-  {
-    name: "Noodles - Indomie Table",
-    units: [
-      { label: "1 Pack", price: 240 },
-      { label: "1 Carton", price: 10400 },
-    ],
-  },
-  {
-    name: "Noodles - Oriental",
-    units: [
-      { label: "1 Pack", price: 270 },
-      { label: "1 Carton", price: 10400 },
-    ],
-  },
-  {
-    name: "Noodles - Golden Penny",
-    units: [
-      { label: "1 Pack", price: 220 },
-      { label: "1 Carton", price: 8400 },
-    ],
-  },
-  {
-    name: "Noodles - Mimee",
-    units: [
-      { label: "1 Pack", price: 220 },
-      { label: "1 Carton", price: 8400 },
-    ],
-  },
-  { name: "Toothpaste - Oracare", units: [{ label: "Tube", price: 1000 }] },
-  {
-    name: "Toothpaste - Close Up (Big)",
-    units: [{ label: "Big Tube", price: 1200 }],
-  },
-  {
-    name: "Toothpaste - Close Up (Small)",
-    units: [{ label: "Small Tube", price: 300 }],
-  },
-  {
-    name: "Toothpaste - Pepsodent (Big)",
-    units: [{ label: "Big Tube", price: 1300 }],
-  },
-  {
-    name: "Toothpaste - Pepsodent (Small)",
-    units: [{ label: "Small Tube", price: 550 }],
-  },
-  {
-    name: "Toothpaste - My My (Big)",
-    units: [{ label: "Big Tube", price: 700 }],
-  },
-  {
-    name: "Toothpaste - My My (Small)",
-    units: [{ label: "Small Tube", price: 350 }],
-  },
-  { name: "Detergent - Viva Big", units: [{ label: "Pack", price: 500 }] },
-  { name: "Detergent - Viva Small", units: [{ label: "Pack", price: 250 }] },
-  { name: "Detergent - Viva 40g", units: [{ label: "Sachet", price: 150 }] },
-  {
-    name: "Detergent - Roll of Big",
-    units: [{ label: "1 Roll", price: 20000 }],
-  },
-  {
-    name: "Detergent - Roll of Small",
-    units: [{ label: "1 Roll", price: 1000 }],
-  },
-  { name: "Lighter", units: [{ label: "1 Piece", price: 150 }] },
+  try {
+    const response = await fetch(url);
+    const text = await response.text();
 
-  // SECTION 5: Beans, Rice, Spaghetti
-  {
-    name: "Beans - Oloyin",
-    units: [
-      { label: "1 Cup", price: 240 },
-      { label: "Congo", price: 2400 },
-    ],
-  },
-  {
-    name: "Beans - Drum",
-    units: [
-      { label: "1 Cup", price: 150 },
-      { label: "Congo", price: 1900 },
-    ],
-  },
-  {
-    name: "Beans - Milk",
-    units: [
-      { label: "1 Cup", price: 200 },
-      { label: "Congo", price: 1000 },
-    ],
-  },
-  {
-    name: "Beans - White",
-    units: [
-      { label: "1 Cup", price: 170 },
-      { label: "Congo", price: 1700 },
-    ],
-  },
-  {
-    name: "Rice",
-    units: [
-      { label: "1 Cup", price: 220 },
-      { label: "Congo", price: 2000 },
-    ],
-  },
-  {
-    name: "Spaghetti - Golden Penny",
-    units: [{ label: "1  Piece", price: 1050 }],
-  },
-  {
-    name: "Spaghetti - Auntie B",
-    units: [{ label: "1 Piece", price: 800 }],
-  },
-  {
-    name: "Spaghetti - Mama's Pride",
-    units: [{ label: "1 Piece", price: 850 }],
-  },
-  { name: "Spaghetti - Dangote", units: [{ label: "1 Piece", price: 700 }] },
-  { name: "Spaghetti - Honeywell", units: [{ label: "1 Piece", price: 750 }] },
-  { name: "Spaghetti - Crown", units: [{ label: "1 Piece", price: 950 }] },
-];
+    const match = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/s);
+    if (!match) throw new Error("Unexpected response format from Google Sheets");
+
+    const json = JSON.parse(match[1]);
+    const rows = json.table.rows || [];
+
+    const grouped = {};
+    rows.forEach((row) => {
+      const cells = row.c || [];
+      const name = cells[0] && cells[0].v ? String(cells[0].v).trim() : null;
+      const label = cells[1] && cells[1].v ? String(cells[1].v).trim() : null;
+      const priceRaw = cells[2] ? cells[2].v : null;
+      const price = typeof priceRaw === "number" ? priceRaw : parseFloat(priceRaw);
+
+      if (!name || !label || isNaN(price)) return; // skip incomplete/blank rows
+
+      if (!grouped[name]) grouped[name] = { name, units: [] };
+      grouped[name].units.push({ label, price });
+    });
+
+    marketProducts = Object.values(grouped);
+
+    if (marketProducts.length === 0) {
+      throw new Error("Sheet loaded but no valid product rows were found");
+    }
+
+    productSearchInput.disabled = false;
+    productSearchInput.placeholder = "Type to search items (e.g. Milk, Oil, Beans)...";
+  } catch (err) {
+    console.error("Failed to load products from Google Sheet:", err);
+    productSearchInput.disabled = true;
+    productSearchInput.placeholder = "Unable to load items — please refresh or try again later";
+  }
+}
+
 
 // Application State Variables
 let cart = [];
@@ -817,3 +549,4 @@ function resetApp() {
 // 7. INITIALIZE APP ON FIRST LOAD
 // ====================================================
 loadCartFromStorage();
+loadProductsFromSheet();
